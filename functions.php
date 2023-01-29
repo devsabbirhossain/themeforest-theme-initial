@@ -11,9 +11,9 @@
 	define( 'DEVSABBIR_VERSION', '1.0.0' );
 	define( 'DEVSABBIR_MINWP_VERSION', '1.0.0' );
 	define( 'DEVSABBIR_TEXTDOMAIN', 'devsabbir' );
-    // echo DEVSABBIR_TEXTDOMAIN;
+	define( 'DEVSABBIR_STYLESHEET_URI', get_stylesheet_uri() );
 
-    // define('DEVSABBIR_', '');
+    // define( 'DEVSABBIR_', '' );
 
 	//-----------------------------------------------------------
 	//---shorthand constants for theme assets url
@@ -31,7 +31,8 @@
 
 	//------------------------------------------------------------
 	//---shorthand constants for theme assets directory path
-	define( 'DEVSABBIR_THEME_DIR', get_template_directory() );
+	define( 'DEVSABBIR_THEME_FILE_DIR', dirname( __FILE__ ) );
+	define( 'DEVSABBIR_THEME_DIR', get_template_directory( ) );
 	define( 'DEVSABBIR_ADMIN_DIR', DEVSABBIR_THEME_DIR.'/assets/admin' );
 	define( 'DEVSABBIR_FRONTEND_DIR', DEVSABBIR_THEME_DIR.'/assets/frontend' );
 
@@ -42,13 +43,11 @@
     define( 'DEVSABBIR_FRONTEND_IMG_DIR', DEVSABBIR_FRONTEND_DIR.'/images' );
 	define( 'DEVSABBIR_FRONTEND_CSS_DIR', DEVSABBIR_FRONTEND_DIR.'/css' );
 	define( 'DEVSABBIR_FRONTEND_JS_DIR', DEVSABBIR_FRONTEND_DIR.'/js' );
-
-
     //------------------------------------------------------------
 	//---shorthand constants for theme assets directory path
 	define( 'DEVSABBIR_INC', DEVSABBIR_THEME_DIR.'/inc');
-	define( 'DEVSABBIR_INC_ADMIN', DEVSABBIR_THEME_DIR.'/assets/css' );
-	define( 'DEVSABBIR_INC_FRONTEND', DEVSABBIR_THEME_DIR.'/assets/js' );
+	define( 'DEVSABBIR_INC_ADMIN', DEVSABBIR_THEME_DIR.'/admin' );
+	define( 'DEVSABBIR_INC_FRONTEND', DEVSABBIR_THEME_DIR.'/frontend' );
 
     /**
      * after setup action hook setup
@@ -68,6 +67,12 @@
 
             // Enable support for Post Thumbnails.
             add_theme_support( 'post-thumbnails' );
+
+            // Register Nav Menus
+            register_nav_menus( [
+                'primary_menu' => __( 'Primary Menu', DEVSABBIR_TEXTDOMAIN ),
+                'footer_menu'  => __( 'Footer Menu', DEVSABBIR_TEXTDOMAIN ),
+            ] );
         }
     endif;
     add_action( 'after_setup_theme', 'devsabbir_after_setup_theme_function' );
@@ -77,7 +82,12 @@
      * wp_enqueue_script this hook is use to show js and css file in frontend
      */
     function devsabbir_wp_enqueue_script_function(){
-        wp_enqueue_script( 'devsabbir_custom', DEVSABBIR_FRONTEND_JS_DIR . '/custom.js', [ 'jquery' ], '1.0.0', true );
+        // enqueue css file
+        wp_enqueue_style( 'devsabbir_custom_css', DEVSABBIR_FRONTEND_CSS_URI . '/custom.css', null, '1.0.0', 'all' );
+        wp_enqueue_style( 'stylesheet', DEVSABBIR_STYLESHEET_URI, null, true, 'all' );
+
+        // enqueue js file
+        wp_enqueue_script( 'devsabbir_custom_js', DEVSABBIR_FRONTEND_JS_URI . '/custom.js', [ 'jquery' ], '1.0.0', true );
     }
     add_action( 'wp_enqueue_scripts', 'devsabbir_wp_enqueue_script_function' );
 
